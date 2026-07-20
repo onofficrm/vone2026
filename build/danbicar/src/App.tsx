@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Phone, MessageCircle, Menu, CarFront, ShieldCheck, Clock, ChevronRight, ChevronDown, FileWarning, TrendingDown, CreditCard, Briefcase, PiggyBank, Users, Calculator, HandCoins, ClipboardList, Wallet, MapPin, CalendarDays, Home, ArrowUp, X, MessageSquareText } from 'lucide-react';
 import { LiveRollingSection } from './components/LiveRollingSection';
 import { StatisticsSection } from './components/StatisticsSection';
+import { PaymentSimulator } from './components/PaymentSimulator';
+import { DocumentChecklist } from './components/DocumentChecklist';
+import { ContactForm } from './components/ContactForm';
 
 /**
  * 단비카 공통 버튼 컴포넌트
@@ -614,297 +617,6 @@ const FinalCTASection = () => {
   );
 };
 
-/**
- * 간편 상담 폼 컴포넌트
- */
-const ContactForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    region: '',
-    status: '',
-    incomeType: '',
-    incomeRange: '',
-    carType: '',
-    monthlyPayment: '',
-    extraFunds: '',
-    time: '',
-    message: '',
-    agreement: false
-  });
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    const handleSetConsultation = (e: any) => {
-      setFormData(prev => ({
-        ...prev,
-        message: `[빠른 상담 선택] ${e.detail}\n\n${prev.message}`
-      }));
-    };
-    window.addEventListener('set-consultation', handleSetConsultation);
-    return () => window.removeEventListener('set-consultation', handleSetConsultation);
-  }, []);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
-    
-    // 휴대전화 번호 형식 검증 (숫자와 하이픈만 허용)
-    if (name === 'phone') {
-      const phoneVal = value.replace(/[^0-9-]/g, '');
-      setFormData(prev => ({ ...prev, [name]: phoneVal }));
-      return;
-    }
-
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.agreement) {
-      alert('개인정보 수집 및 이용에 동의해주세요.');
-      return;
-    }
-    if (isSubmitting) return;
-
-    setIsSubmitting(true);
-    // Simulate network request
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-    }, 1000);
-  };
-
-  if (isSubmitted) {
-    return (
-      <div className="bg-white rounded-2xl p-8 sm:p-12 text-center shadow-lg border border-slate-100">
-        <div className="w-16 h-16 bg-brand-light text-brand-blue rounded-full flex items-center justify-center mx-auto mb-6">
-          <ShieldCheck className="w-8 h-8" />
-        </div>
-        <h3 className="text-2xl sm:text-3xl font-bold text-brand-navy mb-4 break-keep">상담 신청이 정상적으로 접수되었습니다.</h3>
-        <p className="text-slate-600 text-lg mb-8 break-keep">담당자가 확인 후 순차적으로 연락드리겠습니다.</p>
-        <Button onClick={() => setIsSubmitted(false)} variant="outline">
-          새로운 상담 신청하기
-        </Button>
-      </div>
-    );
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg border border-slate-100 text-left">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        {/* 이름 */}
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">이름 <span className="text-brand-orange">*</span></label>
-          <input 
-            type="text" 
-            name="name" 
-            value={formData.name} 
-            onChange={handleChange} 
-            required 
-            placeholder="홍길동"
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all"
-          />
-        </div>
-
-        {/* 연락처 */}
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">연락처 <span className="text-brand-orange">*</span></label>
-          <input 
-            type="tel" 
-            name="phone" 
-            value={formData.phone} 
-            onChange={handleChange} 
-            required 
-            placeholder="010-0000-0000"
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all"
-          />
-        </div>
-
-        {/* 거주 지역 */}
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">거주 지역</label>
-          <input 
-            type="text" 
-            name="region" 
-            value={formData.region} 
-            onChange={handleChange} 
-            placeholder="예: 서울시 강남구"
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all"
-          />
-        </div>
-
-        {/* 현재 상태 */}
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">현재 상태</label>
-          <select 
-            name="status" 
-            value={formData.status} 
-            onChange={handleChange} 
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all bg-white"
-          >
-            <option value="">선택해주세요</option>
-            <option value="개인회생 신청 준비 중">개인회생 신청 준비 중</option>
-            <option value="개인회생 진행 중">개인회생 진행 중</option>
-            <option value="개인회생 인가">개인회생 인가</option>
-            <option value="개인회생 면책">개인회생 면책</option>
-            <option value="파산면책">파산면책</option>
-            <option value="저신용">저신용</option>
-            <option value="기존 할부 거절">기존 할부 거절</option>
-            <option value="기타">기타</option>
-          </select>
-        </div>
-
-        {/* 소득 형태 */}
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">소득 형태</label>
-          <select 
-            name="incomeType" 
-            value={formData.incomeType} 
-            onChange={handleChange} 
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all bg-white"
-          >
-            <option value="">선택해주세요</option>
-            <option value="직장인">직장인</option>
-            <option value="사업자">사업자</option>
-            <option value="프리랜서">프리랜서</option>
-            <option value="일용직">일용직</option>
-            <option value="주부">주부</option>
-            <option value="기타">기타</option>
-          </select>
-        </div>
-
-        {/* 월 소득 구간 */}
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">월 소득 구간</label>
-          <select 
-            name="incomeRange" 
-            value={formData.incomeRange} 
-            onChange={handleChange} 
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all bg-white"
-          >
-            <option value="">선택해주세요</option>
-            <option value="200만원 미만">200만원 미만</option>
-            <option value="200만~300만원">200만~300만원</option>
-            <option value="300만~400만원">300만~400만원</option>
-            <option value="400만원 이상">400만원 이상</option>
-          </select>
-        </div>
-
-        {/* 원하는 차량 종류 */}
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">원하는 차량 종류</label>
-          <select 
-            name="carType" 
-            value={formData.carType} 
-            onChange={handleChange} 
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all bg-white"
-          >
-            <option value="">선택해주세요</option>
-            <option value="경차">경차</option>
-            <option value="준중형">준중형</option>
-            <option value="중형">중형</option>
-            <option value="대형">대형</option>
-            <option value="SUV">SUV</option>
-            <option value="승합차">승합차</option>
-            <option value="화물차">화물차</option>
-            <option value="상담 후 결정">상담 후 결정</option>
-          </select>
-        </div>
-
-        {/* 원하는 월 납입금 */}
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">원하는 월 납입금</label>
-          <input 
-            type="text" 
-            name="monthlyPayment" 
-            value={formData.monthlyPayment} 
-            onChange={handleChange} 
-            placeholder="예: 30만원 (또는 상담 후 결정)"
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all"
-          />
-        </div>
-
-        {/* 추가 필요자금 상담 */}
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">추가 필요자금 상담</label>
-          <select 
-            name="extraFunds" 
-            value={formData.extraFunds} 
-            onChange={handleChange} 
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all bg-white"
-          >
-            <option value="">선택해주세요</option>
-            <option value="필요함">필요함</option>
-            <option value="필요하지 않음">필요하지 않음</option>
-            <option value="상담 후 결정">상담 후 결정</option>
-          </select>
-        </div>
-
-        {/* 상담 가능한 시간 */}
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">상담 가능한 시간</label>
-          <select 
-            name="time" 
-            value={formData.time} 
-            onChange={handleChange} 
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all bg-white"
-          >
-            <option value="">선택해주세요</option>
-            <option value="오전">오전</option>
-            <option value="오후">오후</option>
-            <option value="저녁">저녁</option>
-            <option value="시간 상관없음">시간 상관없음</option>
-          </select>
-        </div>
-
-        {/* 문의 내용 */}
-        <div className="md:col-span-2">
-          <label className="block text-sm font-semibold text-slate-700 mb-2">문의 내용</label>
-          <textarea 
-            name="message" 
-            value={formData.message} 
-            onChange={handleChange} 
-            rows={3}
-            placeholder="추가로 궁금하신 점이나 남기고 싶은 말씀을 자유롭게 적어주세요."
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all resize-none"
-          ></textarea>
-        </div>
-
-        {/* 개인정보 수집 동의 */}
-        <div className="md:col-span-2">
-          <label className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100 cursor-pointer">
-            <input 
-              type="checkbox" 
-              name="agreement" 
-              checked={formData.agreement} 
-              onChange={handleChange} 
-              required
-              className="mt-1 w-5 h-5 rounded border-slate-300 text-brand-blue focus:ring-brand-blue"
-            />
-            <div className="text-sm text-slate-600 break-keep leading-relaxed">
-              <span className="font-semibold text-slate-800">[필수] 개인정보 수집 및 이용 동의</span><br/>
-              단비카는 상담을 위해 최소한의 개인정보를 수집하며, 입력하신 정보는 차량 할부 상담 및 안내 목적으로만 사용됩니다.
-            </div>
-          </label>
-        </div>
-
-      </div>
-
-      <div className="mt-8">
-        <Button type="submit" variant="accent" className="w-full py-4 text-lg shadow-lg hover:shadow-xl" disabled={isSubmitting}>
-          {isSubmitting ? '접수 중...' : '내 조건 무료로 확인하기'}
-        </Button>
-      </div>
-    </form>
-  );
-};
-
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-brand-gray selection:bg-brand-blue selection:text-white pb-24 lg:pb-0">
@@ -920,13 +632,13 @@ export default function App() {
           </div>
           
           <div className="flex items-center gap-6">
-            <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-700">
-              <a href="#about" className="hover:text-brand-blue transition-colors">단비카 소개</a>
-              <a href="#credit" className="hover:text-brand-blue transition-colors">저신용 할부 안내</a>
-              <a href="#cars" className="hover:text-brand-blue transition-colors">차량 찾기</a>
-              <a href="#process" className="hover:text-brand-blue transition-colors">진행 절차</a>
-              <a href="#reviews" className="hover:text-brand-blue transition-colors">출고 후기</a>
-              <a href="#faq" className="hover:text-brand-blue transition-colors">자주 묻는 질문</a>
+            <nav className="hidden md:flex items-center gap-5 text-sm font-semibold text-slate-700">
+              <a href="#about" className="hover:text-brand-blue transition-colors">소개</a>
+              <a href="#simulator" className="hover:text-brand-blue transition-colors">월 납입 계산</a>
+              <a href="#cars" className="hover:text-brand-blue transition-colors">차량</a>
+              <a href="#documents" className="hover:text-brand-blue transition-colors">준비 서류</a>
+              <a href="#reviews" className="hover:text-brand-blue transition-colors">후기</a>
+              <a href="#faq" className="hover:text-brand-blue transition-colors">FAQ</a>
               <a href="#contact" className="hover:text-brand-blue transition-colors">무료 상담</a>
             </nav>
             
@@ -1126,6 +838,8 @@ export default function App() {
         <StatisticsSection />
 
         <CarListSection />
+        <PaymentSimulator />
+        <DocumentChecklist />
 
         {/* 5. Extra Funds Consultation Section */}
         <section className="py-24 bg-sky-50 relative overflow-hidden" id="funds">
