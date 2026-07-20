@@ -46,10 +46,10 @@ export function SiteHeader() {
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `relative py-1 text-[13px] lg:text-sm font-medium tracking-[0.08em] transition-colors duration-300 after:absolute after:left-0 after:-bottom-1 after:h-px after:w-full after:origin-left after:bg-brand-navy after:transition-transform after:duration-300 ${
+                `relative py-1 text-[13px] lg:text-sm font-bold tracking-[0.06em] transition-colors duration-300 after:absolute after:left-0 after:-bottom-1 after:h-px after:w-full after:origin-left after:bg-brand-navy after:transition-transform after:duration-300 ${
                   isActive
                     ? 'text-brand-navy after:scale-x-100'
-                    : 'text-slate-600 hover:text-brand-navy after:scale-x-0 hover:after:scale-x-100'
+                    : 'text-slate-700 hover:text-brand-navy after:scale-x-0 hover:after:scale-x-100'
                 }`
               }
             >
