@@ -1,3 +1,8 @@
 # 홈은 PHP(DB) 없이 정적 랜딩을 우선 사용
+# .xhtml 은 application/xhtml+xml 로  Strict XML 파싱되어 doctype/HTML5에서 오류 발생
 # .html/.php 는 호스팅에서 PHP 핸들러로 붙어 FPM 대기 시 응답이 멈출 수 있음
-DirectoryIndex home.xhtml home.page index.html index.php
+DirectoryIndex home.page index.html index.php
+
+<IfModule mod_mime.c>
+  AddType text/html .page
+</IfModule>
