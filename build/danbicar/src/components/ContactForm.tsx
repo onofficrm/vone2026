@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ShieldCheck } from 'lucide-react';
+import { MessageCircle, Phone, ShieldCheck } from 'lucide-react';
+import { openKakaoWithPrefill, PHONE_DISPLAY, PHONE_TEL } from '../lib/consult';
+import {
+  buildKakaoInquiryMessage,
+  clearInquiryDraft,
+  fetchWithTimeout,
+  loadInquiryDraft,
+  saveInquiryDraft,
+} from '../lib/inquiry';
 
 const inputClass =
   'w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition-all';
@@ -9,12 +17,13 @@ const Button = ({
   variant = 'primary',
   className = '',
   ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'outline' | 'accent' }) => {
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'outline' | 'accent' | 'kakao' }) => {
   const variants = {
     primary: 'bg-brand-navy hover:bg-brand-navy-dark text-white shadow-sm',
     secondary: 'bg-brand-blue hover:bg-sky-700 text-white shadow-sm',
     accent: 'bg-brand-orange hover:bg-orange-700 text-white shadow-md',
     outline: 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50',
+    kakao: 'bg-[#FEE500] hover:bg-[#F4DC00] text-[#3A2929] shadow-sm',
   };
   return (
     <button
@@ -27,19 +36,33 @@ const Button = ({
 };
 
 async function fetchInquiryToken(): Promise<string> {
-  const res = await fetch('/proc/inquiry-token.php', {
-    method: 'GET',
-    credentials: 'same-origin',
-    headers: { Accept: 'application/json' },
-  });
+  const res = await fetchWithTimeout(
+    '/proc/inquiry-token.php',
+    {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: { Accept: 'application/json' },
+    },
+    5000,
+  );
   if (!res.ok) throw new Error('token');
   const data = await res.json();
   if (!data?.token) throw new Error('token');
   return String(data.token);
 }
 
+type FormState = {
+  name: string;
+  phone: string;
+  status: string;
+  timeSlot: string;
+  message: string;
+  agreement: boolean;
+  website_url: string;
+};
+
 export function ContactForm() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormState>({
     name: '',
     phone: '',
     status: '',
@@ -51,6 +74,23 @@ export function ContactForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [manualFallback, setManualFallback] = useState(false);
+  const [draftRestored, setDraftRestored] = useState(false);
+
+  useEffect(() => {
+    const draft = loadInquiryDraft();
+    if (draft) {
+      setFormData((prev) => ({
+        ...prev,
+        name: draft.name || prev.name,
+        phone: draft.phone || prev.phone,
+        status: draft.status || prev.status,
+        timeSlot: draft.timeSlot || prev.timeSlot,
+        message: draft.message || prev.message,
+      }));
+      setDraftRestored(true);
+    }
+  }, []);
 
   useEffect(() => {
     const handleSetConsultation = (e: Event) => {
@@ -65,6 +105,16 @@ export function ContactForm() {
     window.addEventListener('set-consultation', handleSetConsultation);
     return () => window.removeEventListener('set-consultation', handleSetConsultation);
   }, []);
+
+  useEffect(() => {
+    saveInquiryDraft({
+      name: formData.name,
+      phone: formData.phone,
+      status: formData.status,
+      timeSlot: formData.timeSlot,
+      message: formData.message,
+    });
+  }, [formData.name, formData.phone, formData.status, formData.timeSlot, formData.message]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -94,9 +144,30 @@ export function ContactForm() {
     return msg;
   };
 
+  const kakaoPayload = () =>
+    buildKakaoInquiryMessage({
+      name: formData.name.trim(),
+      phone: formData.phone.trim(),
+      status: formData.status,
+      timeSlot: formData.timeSlot,
+      message: buildMessage(),
+    });
+
+  const openManualKakao = async () => {
+    const copied = await openKakaoWithPrefill(kakaoPayload());
+    window.dispatchEvent(
+      new CustomEvent('danbi-toast', {
+        detail: copied
+          ? '상담 내용이 복사되었습니다. 카카오톡에 붙여넣어 주세요.'
+          : '카카오톡 상담창을 열었습니다. 작성하신 내용을 직접 전달해 주세요.',
+      }),
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setManualFallback(false);
 
     if (!formData.agreement) {
       setError('개인정보 수집 및 이용에 동의해주세요.');
@@ -120,48 +191,60 @@ export function ContactForm() {
     body.append('website_url', formData.website_url);
 
     try {
-      /* 1) DB 없이 동작하는 메일함 API 우선 (FPM/MySQL 장애 대비) */
-      let data: { success?: boolean; message?: string; redirect_url?: string } | null = null;
+      /* 1) DB 없는 메일함 — 짧은 타임아웃으로 FPM hang 회피 */
       try {
-        const mailboxRes = await fetch('/api/danbi-inquiry-mailbox.php', {
-          method: 'POST',
-          credentials: 'same-origin',
-          body,
-        });
-        data = await mailboxRes.json().catch(() => null);
-        if (mailboxRes.ok && data?.success) {
+        const mailboxRes = await fetchWithTimeout(
+          '/api/danbi-inquiry-mailbox.php',
+          { method: 'POST', credentials: 'same-origin', body },
+          6500,
+        );
+        const mailboxData = await mailboxRes.json().catch(() => null);
+        if (mailboxRes.ok && mailboxData?.success) {
+          clearInquiryDraft();
           setIsSubmitted(true);
           return;
         }
       } catch {
-        /* fall through to board path */
+        /* FPM hang이면 board path도 동일하게 멈추므로 즉시 카카오/전화 폴백 */
+        setManualFallback(true);
+        setError('서버 접수가 지연되고 있습니다. 아래 카카오톡·전화로 바로 전달해 주세요.');
+        return;
       }
 
-      /* 2) 그누보드 inquiry 게시판 (DB 정상일 때) */
-      const token = await fetchInquiryToken();
-      body.append('onoff_inquiry_token', token);
-      const res = await fetch('/proc/inquiry-submit.php', {
-        method: 'POST',
-        credentials: 'same-origin',
-        body,
-      });
-      data = await res.json().catch(() => null);
-
-      if (!res.ok || !data?.success) {
+      /* 2) 그누보드 inquiry (DB·FPM 정상일 때만) */
+      try {
+        const token = await fetchInquiryToken();
+        body.append('onoff_inquiry_token', token);
+        const res = await fetchWithTimeout(
+          '/proc/inquiry-submit.php',
+          { method: 'POST', credentials: 'same-origin', body },
+          6500,
+        );
+        const data = await res.json().catch(() => null);
+        if (res.ok && data?.success) {
+          clearInquiryDraft();
+          setIsSubmitted(true);
+          if (data.redirect_url) {
+            window.setTimeout(() => {
+              window.location.href = data.redirect_url;
+            }, 1200);
+          }
+          return;
+        }
         throw new Error(data?.message || '접수에 실패했습니다.');
-      }
-
-      setIsSubmitted(true);
-      if (data.redirect_url) {
-        window.setTimeout(() => {
-          window.location.href = data.redirect_url;
-        }, 1200);
+      } catch (boardErr) {
+        const msg = boardErr instanceof Error ? boardErr.message : '접수에 실패했습니다.';
+        if (msg === 'token' || /abort|Failed to fetch|NetworkError/i.test(msg) || boardErr instanceof DOMException) {
+          setManualFallback(true);
+          setError('서버 접수가 지연되고 있습니다. 아래 카카오톡·전화로 바로 전달해 주세요.');
+          return;
+        }
+        throw boardErr;
       }
     } catch (err) {
+      setManualFallback(true);
       const msg = err instanceof Error ? err.message : '접수에 실패했습니다.';
-      setError(
-        `${msg} 잠시 후 다시 시도하거나, 전화(1599-4950)·카카오톡으로 바로 상담해 주세요.`,
-      );
+      setError(`${msg} 카카오톡 또는 전화로 바로 상담해 주세요.`);
     } finally {
       setIsSubmitting(false);
     }
@@ -196,6 +279,9 @@ export function ContactForm() {
       <p className="text-sm text-slate-500 mb-6 break-keep">
         이름·연락처·상태·희망 시간만 남겨주시면 됩니다. 자세한 내용은 상담 시 함께 확인합니다.
       </p>
+      {draftRestored && (
+        <p className="text-xs text-brand-blue mb-4 break-keep">이전에 작성하던 내용이 이어서 불러와졌습니다.</p>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -273,7 +359,6 @@ export function ContactForm() {
               </button>
             ))}
           </div>
-          <input type="hidden" name="timeSlot" value={formData.timeSlot} required={false} />
           {!formData.timeSlot && (
             <p className="text-xs text-slate-400 mt-2">상담 가능한 시간대를 선택해 주세요.</p>
           )}
@@ -291,7 +376,6 @@ export function ContactForm() {
           />
         </div>
 
-        {/* honeypot */}
         <div className="hidden" aria-hidden="true">
           <label>
             website
@@ -312,7 +396,10 @@ export function ContactForm() {
             <div className="text-sm text-slate-600 break-keep leading-relaxed">
               <span className="font-semibold text-slate-800">[필수] 개인정보 수집 및 이용 동의</span>
               <br />
-              단비카는 상담을 위해 최소한의 개인정보를 수집하며, 입력하신 정보는 차량 할부 상담 및 안내 목적으로만 사용됩니다.
+              단비카는 상담을 위해 최소한의 개인정보를 수집하며, 입력하신 정보는 차량 할부 상담 및 안내 목적으로만 사용됩니다.{' '}
+              <a href="#privacy" className="text-brand-blue underline-offset-2 hover:underline">
+                안내 보기
+              </a>
             </div>
           </label>
         </div>
@@ -321,6 +408,22 @@ export function ContactForm() {
       {error && (
         <div className="mt-6 p-4 rounded-xl bg-orange-50 border border-orange-100 text-sm text-orange-800 break-keep leading-relaxed">
           {error}
+        </div>
+      )}
+
+      {manualFallback && (
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Button type="button" variant="kakao" className="w-full" onClick={openManualKakao}>
+            <MessageCircle className="w-5 h-5" />
+            카카오로 내용 전달하기
+          </Button>
+          <a
+            href={PHONE_TEL}
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold transition-all duration-200 text-[15px] sm:text-base w-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
+          >
+            <Phone className="w-5 h-5" />
+            {PHONE_DISPLAY} 전화상담
+          </a>
         </div>
       )}
 

@@ -18,6 +18,8 @@ import { CompareSection } from './components/CompareSection';
 import { SoftCtaBanner } from './components/SoftCtaBanner';
 import { StatusLookupSection } from './components/StatusLookupSection';
 import { ProcessVideoSection } from './components/ProcessVideoSection';
+import { TrustTimelineSection } from './components/TrustTimelineSection';
+import { PrivacyNoticeSection } from './components/PrivacyNoticeSection';
 import { openKakaoWithPrefill, buildSituationMessage } from './lib/consult';
 
 /**
@@ -677,6 +679,7 @@ export default function App() {
 
         <ProcessSection />
         <ProcessVideoSection />
+        <TrustTimelineSection />
         <CustomerTypeSection />
         <ConsultationStatusSection />
         <StatusLookupSection />
@@ -786,6 +789,7 @@ export default function App() {
 
         <ReviewSection />
         <FAQSection />
+        <PrivacyNoticeSection />
 
         <FinalCTASection />
 
@@ -849,10 +853,10 @@ export default function App() {
               <h3 className="text-white font-bold mb-4">안내</h3>
               <ul className="space-y-3 text-sm">
                 <li><a href="#" className="hover:text-white transition-colors">회사소개</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">이용약관</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">개인정보처리방침</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">중고차 구매 유의사항</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">금융상품 안내</a></li>
+                <li><a href="#privacy" className="hover:text-white transition-colors">개인정보처리방침</a></li>
+                <li><a href="#insights" className="hover:text-white transition-colors">상담 가이드</a></li>
+                <li><a href="#timeline" className="hover:text-white transition-colors">진행 일정</a></li>
+                <li><a href="#status-lookup" className="hover:text-white transition-colors">상담 진행 조회</a></li>
               </ul>
             </div>
 

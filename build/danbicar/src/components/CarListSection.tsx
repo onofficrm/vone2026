@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from 'react';
+import { MessageCircle } from 'lucide-react';
 import { useHomeFeed, type FeedCar } from '../lib/homeFeed';
+import { openKakaoWithPrefill } from '../lib/consult';
 
 const categories = ['전체', '경차', '준중형', '중형', '대형', 'SUV', '승합차', '화물차'];
 
@@ -27,6 +29,19 @@ export function CarListSection() {
       }),
     );
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const askCarKakao = async (car: FeedCar) => {
+    const copied = await openKakaoWithPrefill(
+      `[단비카 차량 상담]\n관심 차량: ${car.manufacturer} ${car.name} (${car.year}, ${car.type})\n할부 상담 부탁드립니다.`,
+    );
+    if (copied) {
+      window.dispatchEvent(
+        new CustomEvent('danbi-toast', {
+          detail: '차량 상담 문구가 복사되었습니다. 카카오톡에 붙여넣어 주세요.',
+        }),
+      );
+    }
   };
 
   return (
@@ -90,12 +105,17 @@ export function CarListSection() {
                     <span className="font-bold text-slate-700">{car.stock || '상담 후 확인'}</span>
                   </div>
                 </div>
-                <div className="flex gap-2 mt-auto">
-                  <button type="button" onClick={() => askCar(car)} className="flex-1 px-2 py-2.5 text-sm font-bold rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50">
-                    자세히 보기
-                  </button>
-                  <button type="button" onClick={() => askCar(car)} className="flex-1 px-2 py-2.5 text-sm font-bold rounded-xl bg-brand-navy text-white hover:bg-brand-navy-dark">
+                <div className="flex flex-col gap-2 mt-auto">
+                  <button type="button" onClick={() => askCar(car)} className="w-full px-2 py-2.5 text-sm font-bold rounded-xl bg-brand-navy text-white hover:bg-brand-navy-dark">
                     할부 상담하기
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => askCarKakao(car)}
+                    className="w-full px-2 py-2.5 text-sm font-bold rounded-xl bg-[#FEE500] text-[#3A2929] hover:bg-[#F4DC00] inline-flex items-center justify-center gap-1.5"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    카카오 바로 상담
                   </button>
                 </div>
               </div>
@@ -108,7 +128,7 @@ export function CarListSection() {
           )}
         </div>
         <p className="text-center text-xs text-slate-400 mt-8 break-keep">
-          * 재고·가격은 변동될 수 있으며, home-feed.json의 cars 항목으로 관리합니다. 게시판 연동 시 API로 교체 가능합니다.
+          * 표시된 차량·월 납입 구간은 상담용 안내이며, 실제 가능 여부와 조건은 심사 후 확정됩니다.
         </p>
       </div>
     </section>
