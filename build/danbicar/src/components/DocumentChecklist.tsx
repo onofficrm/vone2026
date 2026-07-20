@@ -95,7 +95,7 @@ export function DocumentChecklist() {
             * 상담 신청 단계에서는 서류 제출이 필수가 아닙니다. 담당자가 필요한 항목만 안내합니다.
           </p>
           <a
-            href="#contact"
+            href="/contact"
             className="inline-flex mt-6 px-6 py-3 rounded-xl font-bold bg-brand-navy text-white hover:bg-brand-navy-dark transition-colors"
           >
             서류 준비 전에도 상담 신청하기

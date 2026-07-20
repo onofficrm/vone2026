@@ -1,8 +1,32 @@
 # 홈은 PHP(DB) 없이 정적 랜딩을 우선 사용
-# .xhtml 은 application/xhtml+xml 로  Strict XML 파싱되어 doctype/HTML5에서 오류 발생
+# .xhtml 은 application/xhtml+xml 로 Strict XML 파싱되어 doctype/HTML5에서 오류 발생
 # .html/.php 는 호스팅에서 PHP 핸들러로 붙어 FPM 대기 시 응답이 멈출 수 있음
 DirectoryIndex home.page index.html index.php
 
 <IfModule mod_mime.c>
   AddType text/html .page
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # 이미 존재하는 파일/디렉터리는 그대로
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # SEO 독립 URL → 정적 .page (DB/PHP 불필요)
+  RewriteRule ^about/?$ /about.page [L]
+  RewriteRule ^cars/?$ /cars.page [L]
+  RewriteRule ^simulator/?$ /simulator.page [L]
+  RewriteRule ^delivery/?$ /delivery.page [L]
+  RewriteRule ^guide/?$ /guide.page [L]
+  RewriteRule ^reviews/?$ /reviews.page [L]
+  RewriteRule ^faq/?$ /faq.page [L]
+  RewriteRule ^contact/?$ /contact.page [L]
+  RewriteRule ^status/?$ /status.page [L]
+  RewriteRule ^process/?$ /process.page [L]
+  RewriteRule ^funds/?$ /funds.page [L]
+  RewriteRule ^privacy/?$ /privacy.page [L]
+  RewriteRule ^documents/?$ /documents.page [L]
 </IfModule>

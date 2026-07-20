@@ -62,7 +62,7 @@ export function CompareSection() {
 
         <div className="text-center mt-10">
           <a
-            href="#contact"
+            href="/contact"
             className="inline-flex px-8 py-4 rounded-xl font-bold bg-brand-navy text-white hover:bg-brand-navy-dark transition-colors"
           >
             거절 후 재상담 신청하기

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
 
 export function SoftCtaBanner() {
@@ -33,12 +34,12 @@ export function SoftCtaBanner() {
         <p className="text-sm font-medium break-keep pr-6 sm:pr-0">
           조건만 먼저 확인해 보세요. 상담 신청만으로 계약은 진행되지 않습니다.
         </p>
-        <a
-          href="#contact"
+        <Link
+          to="/contact"
           className="shrink-0 inline-flex justify-center px-4 py-2.5 rounded-xl text-sm font-bold bg-brand-orange hover:bg-orange-700 transition-colors"
         >
           30초 상담
-        </a>
+        </Link>
       </div>
     </div>
   );

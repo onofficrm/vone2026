@@ -52,7 +52,7 @@ export function ProcessVideoSection() {
 
         <div className="text-center">
           <a
-            href="#contact"
+            href="/contact"
             className="inline-flex px-8 py-4 rounded-xl font-bold bg-brand-orange hover:bg-orange-700 transition-colors"
           >
             지금 상담 신청하기

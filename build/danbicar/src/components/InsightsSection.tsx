@@ -129,7 +129,7 @@ export function InsightsSection() {
                       ))}
                     </ul>
                     <a
-                      href="#contact"
+                      href="/contact"
                       className="inline-flex mt-6 px-5 py-2.5 rounded-xl text-sm font-bold bg-brand-navy text-white hover:bg-brand-navy-dark"
                     >
                       이 내용으로 상담 신청

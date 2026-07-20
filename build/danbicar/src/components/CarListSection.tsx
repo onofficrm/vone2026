@@ -28,7 +28,7 @@ export function CarListSection() {
         detail: `[차량 상담]\n관심 차량: ${car.manufacturer} ${car.name} (${car.year}, ${car.type})`,
       }),
     );
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    window.location.href = '/contact';
   };
 
   const askCarKakao = async (car: FeedCar) => {

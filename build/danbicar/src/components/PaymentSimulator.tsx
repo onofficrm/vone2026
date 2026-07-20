@@ -77,7 +77,7 @@ export function PaymentSimulator() {
     ].filter(Boolean);
 
     window.dispatchEvent(new CustomEvent('set-consultation', { detail: lines.join('\n') }));
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    window.location.href = '/contact';
   };
 
   return (

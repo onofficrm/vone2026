@@ -42,7 +42,7 @@ export function RegionalDeliverySection() {
 
         <div className="text-center">
           <a
-            href="#contact"
+            href="/contact"
             className="inline-flex px-8 py-4 rounded-xl font-bold bg-white text-brand-navy hover:bg-slate-100 transition-colors"
           >
             우리 지역 탁송 일정 상담하기

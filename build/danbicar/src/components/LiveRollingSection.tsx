@@ -148,7 +148,7 @@ export const LiveRollingSection = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 max-w-3xl mx-auto">
-          <a href="#contact" className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold transition-all duration-200 text-base bg-brand-navy text-white hover:bg-brand-navy-dark shadow-md">
+          <a href="/contact" className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold transition-all duration-200 text-base bg-brand-navy text-white hover:bg-brand-navy-dark shadow-md">
             나도 상담 신청하기
           </a>
           <a href="tel:15994950" className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold transition-all duration-200 text-base bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm">

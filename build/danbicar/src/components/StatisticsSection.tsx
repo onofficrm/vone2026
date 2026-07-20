@@ -143,7 +143,7 @@ export const StatisticsSection = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
-            <a href="#contact" className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold transition-all duration-200 text-base bg-brand-navy text-white hover:bg-brand-navy-dark shadow-md max-w-sm mx-auto sm:mx-0 w-full">
+            <a href="/contact" className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold transition-all duration-200 text-base bg-brand-navy text-white hover:bg-brand-navy-dark shadow-md max-w-sm mx-auto sm:mx-0 w-full">
               내 조건 무료 확인하기
             </a>
             <a href="tel:15994950" className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold transition-all duration-200 text-base bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm max-w-sm mx-auto sm:mx-0 w-full">

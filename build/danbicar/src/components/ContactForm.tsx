@@ -262,7 +262,7 @@ export function ContactForm() {
         <p className="text-slate-600 text-lg mb-6 break-keep">담당자가 확인 후 순차적으로 연락드리겠습니다.</p>
         <p className="text-sm text-slate-500 mb-8 break-keep">
           접수 상태는{' '}
-          <a href="#status-lookup" className="text-brand-blue font-semibold underline-offset-2 hover:underline">
+          <a href="/status" className="text-brand-blue font-semibold underline-offset-2 hover:underline">
             연락처 끝자리 조회
           </a>
           에서 확인할 수 있습니다.
@@ -397,7 +397,7 @@ export function ContactForm() {
               <span className="font-semibold text-slate-800">[필수] 개인정보 수집 및 이용 동의</span>
               <br />
               단비카는 상담을 위해 최소한의 개인정보를 수집하며, 입력하신 정보는 차량 할부 상담 및 안내 목적으로만 사용됩니다.{' '}
-              <a href="#privacy" className="text-brand-blue underline-offset-2 hover:underline">
+              <a href="/privacy" className="text-brand-blue underline-offset-2 hover:underline">
                 안내 보기
               </a>
             </div>

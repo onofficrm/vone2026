@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>중고차 월 납입 시뮬레이션 | 예산별 차급 안내 | 단비카</title>
+    <meta name="description" content="월 납입 예산과 희망 차급을 입력해 상담 가능 구간을 먼저 확인해 보세요. 확정 금액은 상담 후 안내됩니다." />
+    <meta name="keywords" content="중고차 월납입, 할부 시뮬레이터, 개인회생 월납입, 저신용 할부" />
+    <link rel="canonical" href="https://vone.kr/simulator" />
+    <link rel="icon" href="/plugin/onoff-builder-bridge/imports/danbicar/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/plugin/onoff-builder-bridge/imports/danbicar/favicon.ico" sizes="any" />
+    <link rel="icon" href="/plugin/onoff-builder-bridge/imports/danbicar/favicon-32x32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/plugin/onoff-builder-bridge/imports/danbicar/apple-touch-icon.png" sizes="180x180" />
+    <meta name="theme-color" content="#1e293b" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:url" content="https://vone.kr/simulator" />
+    <meta property="og:title" content="중고차 월 납입 시뮬레이션 | 예산별 차급 안내 | 단비카" />
+    <meta property="og:description" content="월 납입 예산과 희망 차급을 입력해 상담 가능 구간을 먼저 확인해 보세요. 확정 금액은 상담 후 안내됩니다." />
+    <meta property="og:site_name" content="단비카" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="중고차 월 납입 시뮬레이션 | 예산별 차급 안내 | 단비카" />
+    <meta name="twitter:description" content="월 납입 예산과 희망 차급을 입력해 상담 가능 구간을 먼저 확인해 보세요. 확정 금액은 상담 후 안내됩니다." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=1200" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://vone.kr/#website",
+          "url": "https://vone.kr/",
+          "name": "단비카",
+          "description": "개인회생중고차할부·저신용중고차할부 전문상담",
+          "inLanguage": "ko-KR"
+        },
+        {
+          "@type": "AutoDealer",
+          "@id": "https://vone.kr/#organization",
+          "name": "단비카",
+          "url": "https://vone.kr/",
+          "telephone": "+82-1599-4950",
+          "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80",
+          "areaServed": "KR",
+          "priceRange": "$$"
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://vone.kr/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "개인회생 중에도 중고차 할부가 가능한가요?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "가능 여부는 개인회생 진행 단계, 변제금 납부 내역, 소득 등 세부 조건에 따라 달라질 수 있습니다. 상담 신청만으로 계약이나 신용조회가 자동 진행되지는 않습니다."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "신용점수가 낮아도 상담할 수 있나요?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "저신용 고객도 상담이 가능합니다. 금융사 심사 기준에 따라 결과는 다를 수 있으며, 월 납입 예산과 소득을 기준으로 가능한 방법을 안내합니다."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "상담하면 신용조회가 바로 진행되나요?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "상담 신청만으로 바로 신용조회가 진행되거나 등급이 하락하지 않습니다. 필요 시 안전한 범위에서 가능 여부부터 확인합니다."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "전국 어디에서나 차량을 받을 수 있나요?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "전국 탁송이 가능하므로 거주 지역과 관계없이 상담 및 출고를 진행할 수 있습니다. 탁송비와 일정은 차량·지역에 따라 안내됩니다."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+    <script type="module" crossorigin src="/plugin/onoff-builder-bridge/imports/danbicar/assets/index-DRgtOlbM.js"></script>
+    <link rel="stylesheet" crossorigin href="/plugin/onoff-builder-bridge/imports/danbicar/assets/index-eFyCxV3k.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

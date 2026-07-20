@@ -3,9 +3,11 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
 
-export default defineConfig(() => {
+export default defineConfig(({ mode }) => {
+  const isProd = mode === 'production';
   return {
-    base: './',
+    // 프로덕션: 루트 .page 파일에서도 동일 번들을 쓰도록 절대 경로
+    base: isProd ? '/plugin/onoff-builder-bridge/imports/danbicar/' : '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
@@ -13,10 +15,7 @@ export default defineConfig(() => {
       },
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
   };
