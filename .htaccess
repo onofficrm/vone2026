@@ -1,0 +1,3 @@
+# 홈은 PHP(DB) 없이 정적 랜딩을 우선 사용
+# .html/.php 는 호스팅에서 PHP 핸들러로 붙어 FPM 대기 시 응답이 멈출 수 있음
+DirectoryIndex home.xhtml home.page index.html index.php
