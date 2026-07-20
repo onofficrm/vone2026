@@ -1,0 +1,8 @@
+# 관리자(/adm)는 항상 index.php 우선 — 루트 DirectoryIndex(home.page) 영향 차단
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # /adm → /adm/ 로 정규화
+  RewriteRule ^$ index.php [L]
+</IfModule>

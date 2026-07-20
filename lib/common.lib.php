@@ -1864,10 +1864,13 @@ function sql_connect($host, $user, $pass, $db=G5_MYSQL_DB)
         // 연결 대기가 길어지면 PHP-FPM 워커가 고갈되어 사이트 전체가 멈춘다.
         $link = mysqli_init();
         if ($link) {
-            @mysqli_options($link, MYSQLI_OPT_CONNECT_TIMEOUT, 3);
+            @mysqli_options($link, MYSQLI_OPT_CONNECT_TIMEOUT, 2);
+            if (defined('MYSQLI_OPT_READ_TIMEOUT')) {
+                @mysqli_options($link, MYSQLI_OPT_READ_TIMEOUT, 3);
+            }
             $connected = @mysqli_real_connect($link, $host, $user, $pass, $db);
             if (!$connected) {
-                die('MySQL Host, User, Password, DB 정보에 오류가 있습니다.');
+                die('MySQL 연결에 실패했습니다. DB 기동·data/dbconfig.php 계정 정보를 확인해 주세요. (' . (function_exists('mysqli_connect_error') ? mysqli_connect_error() : 'connect failed') . ')');
             }
         } else {
             die('MySQL 초기화에 실패했습니다.');
