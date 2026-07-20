@@ -465,47 +465,67 @@ export default function App() {
       <ToastHost />
       <SoftCtaBanner />
       
-      {/* 1. Header (GNB) */}
-      <header className="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-100 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-brand-navy flex items-center justify-center">
-              <CarFront className="w-5 h-5 text-white" />
+      {/* 1. Header (GNB) — 로고 | 중앙 메뉴 | CTA */}
+      <header className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/70">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-[4.5rem] flex items-center gap-6 lg:gap-10">
+          <a href="#" className="shrink-0 flex items-center gap-2.5 group" aria-label="단비카 홈">
+            <div className="w-9 h-9 rounded-md bg-brand-navy flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-[1.03]">
+              <CarFront className="w-[18px] h-[18px] text-white" strokeWidth={1.75} />
             </div>
-            <span className="text-xl font-bold text-brand-navy tracking-tight">단비카</span>
-          </div>
-          
-          <div className="flex items-center gap-6">
-            <nav className="hidden md:flex items-center gap-5 text-sm font-semibold text-slate-700">
-              <a href="#about" className="hover:text-brand-blue transition-colors">소개</a>
-              <a href="#simulator" className="hover:text-brand-blue transition-colors">월 납입</a>
-              <a href="#delivery" className="hover:text-brand-blue transition-colors">탁송</a>
-              <a href="#insights" className="hover:text-brand-blue transition-colors">가이드</a>
-              <a href="#reviews" className="hover:text-brand-blue transition-colors">후기</a>
-              <a href="#status-lookup" className="hover:text-brand-blue transition-colors">진행조회</a>
-              <a href="#contact" className="hover:text-brand-blue transition-colors">무료 상담</a>
-            </nav>
-            
-            <div className="hidden sm:flex items-center gap-2">
-              <Button as="a" href="tel:15994950" variant="primary" className="!py-2 !px-4 !rounded-lg text-sm !gap-1.5">
-                <Phone className="w-4 h-4" />
-                1599-4950
-              </Button>
-              <KakaoCta className="!py-2 !px-4 !rounded-lg text-sm !gap-1.5" showIcon={false}>
-                <MessageCircle className="w-4 h-4" />
-                카카오톡 상담
-              </KakaoCta>
-            </div>
-            
-            <button className="md:hidden p-2 text-slate-600 hover:text-brand-navy">
-              <Menu className="w-6 h-6" />
+            <span className="text-[1.25rem] font-semibold text-brand-navy tracking-[0.12em]">단비카</span>
+          </a>
+
+          <nav
+            className="hidden md:flex flex-1 items-center justify-center gap-7 lg:gap-10"
+            aria-label="주요 메뉴"
+          >
+            {[
+              { href: '#about', label: '소개' },
+              { href: '#simulator', label: '월 납입' },
+              { href: '#delivery', label: '탁송' },
+              { href: '#insights', label: '가이드' },
+              { href: '#reviews', label: '후기' },
+              { href: '#contact', label: '무료 상담' },
+            ].map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="relative py-1 text-[13px] lg:text-sm font-medium tracking-[0.08em] text-slate-600 transition-colors duration-300 hover:text-brand-navy after:absolute after:left-0 after:-bottom-1 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-brand-navy after:transition-transform after:duration-300 hover:after:scale-x-100"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="ml-auto md:ml-0 shrink-0 flex items-center gap-2.5 sm:gap-3">
+            <a
+              href="tel:15994950"
+              className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-[13px] font-medium tracking-[0.06em] text-brand-navy border border-slate-200/90 rounded-md hover:border-brand-navy/40 hover:bg-slate-50 transition-colors duration-300"
+            >
+              <Phone className="w-3.5 h-3.5 opacity-70" strokeWidth={1.75} />
+              1599-4950
+            </a>
+            <KakaoCta
+              className="!py-2 !px-3.5 !rounded-md !text-[13px] !font-medium !tracking-[0.04em] !gap-1.5 !shadow-none border border-[#E6C200]/bg-[#F5E6A8] hover:!bg-[#F0DC8A] !text-[#3A2929]"
+              showIcon={false}
+            >
+              <MessageCircle className="w-3.5 h-3.5" strokeWidth={1.75} />
+              <span className="hidden lg:inline">카카오톡 상담</span>
+              <span className="lg:hidden">카카오</span>
+            </KakaoCta>
+            <button
+              type="button"
+              className="md:hidden p-2 text-slate-500 hover:text-brand-navy transition-colors"
+              aria-label="메뉴"
+            >
+              <Menu className="w-5 h-5" strokeWidth={1.75} />
             </button>
           </div>
         </div>
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-grow pt-16">
+      <main className="flex-grow pt-[4.5rem]">
         
         {/* 2. Hero Section */}
         <section className="bg-brand-navy text-white relative overflow-hidden">
