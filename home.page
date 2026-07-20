@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>개인회생중고차할부·저신용중고차할부 상담 | 단비카</title>
+    <meta name="description" content="개인회생 진행 중이거나 신용점수가 낮아 중고차 할부가 걱정되시나요? 단비카가 차량 선택, 할부 조건, 월 납입금과 추가 필요자금 상담까지 고객 상황에 맞게 안내합니다. 무료상담 1599-4950." />
+    <meta name="keywords" content="개인회생중고차할부, 저신용중고차할부, 개인회생 자동차할부, 개인회생 중고차, 저신용자 중고차할부, 할부 거절 중고차, 파산면책 중고차할부, 중고차 여유자금 상담" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://danbicar.com/#website",
+          "url": "https://danbicar.com/",
+          "name": "단비카",
+          "description": "개인회생중고차할부·저신용중고차할부 전문상담"
+        },
+        {
+          "@type": "AutoDealer",
+          "@id": "https://danbicar.com/#organization",
+          "name": "단비카",
+          "url": "https://danbicar.com/",
+          "logo": "https://danbicar.com/logo.png",
+          "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80",
+          "telephone": "1599-4950",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "[관리자 입력: 사업장 주소]",
+            "addressLocality": "[관리자 입력: 시/군/구]",
+            "addressRegion": "[관리자 입력: 시/도]",
+            "postalCode": "[관리자 입력: 우편번호]",
+            "addressCountry": "KR"
+          }
+        }
+      ]
+    }
+    </script>
+    <script type="module" crossorigin src="/plugin/onoff-builder-bridge/imports/danbicar/assets/index-DLpyyGtf.js"></script>
+    <link rel="stylesheet" crossorigin href="/plugin/onoff-builder-bridge/imports/danbicar/assets/index-BA8ANMUc.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+
