@@ -1,0 +1,26 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+
+  /* 단비카 컬러 시스템 */
+  --color-brand-navy: #1e293b; /* 메인 컬러: 짙은 네이비 (slate-800) */
+  --color-brand-navy-dark: #0f172a; /* 강조 네이비 (slate-900) */
+  --color-brand-blue: #0284c7; /* 서브 컬러: 밝은 블루 (sky-600) */
+  --color-brand-light: #f0f9ff; /* 보조 배경: 매우 연한 하늘색 (sky-50) */
+  --color-brand-orange: #ea580c; /* 강조 컬러: 따뜻한 오렌지 (orange-600) */
+  --color-brand-gray: #f8fafc; /* 보조 배경: 연한 회색 (slate-50) */
+  
+  --color-kakao: #FEE500;
+  --color-kakao-text: #000000;
+}
+
+body {
+  @apply font-sans text-slate-800 bg-white antialiased;
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}

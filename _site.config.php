@@ -8,27 +8,27 @@ if (!defined('_GNUBOARD_')) {
 }
 
 $site_config = array(
-    'site_name'           => '샘플 사이트',
-    'site_desc'           => '빌더 디자인 적용이 쉬운 그누보드 베이스 템플릿',
-    'company_name'        => '회사명',
+    'site_name'           => '단비카',
+    'site_desc'           => '개인회생·저신용 전문 중고차 할부 상담',
+    'company_name'        => '단비카',
     'ceo_name'            => '대표자명',
     'business_no'         => '000-00-00000',
-    'phone'               => '010-0000-0000',
-    'kakao_url'           => '#',
+    'phone'               => '1599-4950',
+    'kakao_url'           => 'https://open.kakao.com/o/sILPODCi',
     'email'               => 'help@example.com',
     'address'             => '주소를 입력하세요',
-    'primary_color'       => '#2563eb',
-    'secondary_color'     => '#64748b',
+    'primary_color'       => '#1e293b',
+    'secondary_color'     => '#0284c7',
     'logo_path'           => '/img/logo/logo.svg',
     'og_image'            => '/img/common/og-image.jpg',
     /* SEO (components/seo-meta.php) */
-    'seo_title'           => '',
-    'seo_description'     => '',
-    'main_keyword'        => '',
-    'sub_keywords'        => '',
+    'seo_title'           => '개인회생중고차할부·저신용중고차할부 상담 | 단비카',
+    'seo_description'     => '개인회생 진행 중이거나 신용점수가 낮아 중고차 할부가 걱정되시나요? 단비카가 차량 선택, 할부 조건, 월 납입금과 추가 필요자금 상담까지 안내합니다.',
+    'main_keyword'        => '개인회생중고차할부',
+    'sub_keywords'        => '저신용중고차할부, 개인회생 자동차할부, 할부 거절 중고차',
     'robots'              => 'index,follow',
-    'consultation_text'   => '상담문의',
-    'footer_desc'         => '고객의 성장을 돕는 웹사이트 제작 베이스입니다.',
+    'consultation_text'   => '무료 상담',
+    'footer_desc'         => '개인회생, 저신용 전문 중고차 할부 상담. 어려운 상황에서도 최선의 방법을 찾습니다.',
     /* 문의 폼 → inquiry 게시판 (proc/inquiry-submit.php) */
     'inquiry_bo_table'        => 'inquiry',
     'inquiry_notify_enabled'  => true,
@@ -109,7 +109,7 @@ $site_config = array(
     'icrm_hub_enabled'          => true,
     'icrm_hub_geo_button'       => true,
     /* onoff-builder-bridge — 루트 / 를 빌더 페이지로 (project_id) */
-    'home_builder_bridge_id'    => '',
+    'home_builder_bridge_id'    => 'danbicar',
 );
 
 /**
