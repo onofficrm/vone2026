@@ -9,7 +9,11 @@ import { ResponseHoursNotice } from './components/ResponseHoursNotice';
 import { VehicleCheckGuide } from './components/VehicleCheckGuide';
 import { SituationAnchors } from './components/SituationAnchors';
 import { ToastHost } from './components/ToastHost';
-import { KAKAO_URL, openKakaoWithPrefill, buildSituationMessage } from './lib/consult';
+import { RegionalDeliverySection } from './components/RegionalDeliverySection';
+import { InsightsSection } from './components/InsightsSection';
+import { ConsultationStatusSection } from './components/ConsultationStatusSection';
+import { ReviewSection } from './components/ReviewSection';
+import { openKakaoWithPrefill, buildSituationMessage } from './lib/consult';
 
 /**
  * 단비카 공통 버튼 컴포넌트
@@ -310,159 +314,6 @@ const CustomerTypeSection = () => {
   );
 };
 
-const consultationCases = [
-  { name: '김○○님', type: '개인회생 인가', car: '카니발', status: '상담 접수', statusColor: 'bg-slate-100 text-slate-600' },
-  { name: '박○○님', type: '저신용 직장인', car: '아반떼', status: '상담 진행', statusColor: 'bg-brand-blue/10 text-brand-blue' },
-  { name: '이○○님', type: '개인회생 진행 중', car: 'SUV', status: '상담 완료', statusColor: 'bg-brand-orange/10 text-brand-orange' },
-  { name: '최○○님', type: '기존 할부 거절', car: '레이', status: '상담 접수', statusColor: 'bg-slate-100 text-slate-600' }
-];
-
-const ConsultationStatusSection = () => {
-  return (
-    <section className="py-24 bg-brand-light/50" id="status">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy mb-4 tracking-tight">단비카 상담 진행 현황</h2>
-          <p className="text-slate-600 text-lg">최근 단비카를 통해 상담을 진행하신 고객님들의 실제 사례입니다.</p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {consultationCases.map((item, idx) => (
-            <Card key={idx} className="!p-5 text-left border-brand-blue/10">
-              <div className="flex justify-between items-center mb-4">
-                <span className="font-bold text-lg text-brand-navy">{item.name}</span>
-                <span className={`text-xs font-bold px-2.5 py-1 rounded-md ${item.statusColor}`}>{item.status}</span>
-              </div>
-              <div className="space-y-2 text-sm text-slate-600 font-medium">
-                <p className="flex justify-between border-b border-slate-100 pb-2">
-                  <span>고객 유형</span>
-                  <span className="text-slate-800">{item.type}</span>
-                </p>
-                <p className="flex justify-between pt-1">
-                  <span>관심 차량</span>
-                  <span className="text-slate-800">{item.car}</span>
-                </p>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const ReviewSection = () => {
-  const reviews = [
-    {
-      id: 1,
-      title: '개인회생 중 출퇴근용 아반떼 상담 사례',
-      carName: '현대 아반떼',
-      situation: '개인회생 인가 후 12회차 납부 중, 직장인',
-      process: '월 납입금 30만원대 예산으로 아반떼 추천 및 전액 할부 승인',
-      review: '출퇴근 차량이 꼭 필요했는데 여기저기 거절당하다가 단비카를 알게 되었습니다. 제 상황에 맞게 꼼꼼하게 상담해주시고 좋은 차량으로 출고해주셔서 감사합니다.',
-      region: '경기 수원',
-      date: '2026.06.15',
-      image: 'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&q=80&fm=webp&w=800'
-    },
-    {
-      id: 2,
-      title: '기존 할부 거절 후 경차를 선택한 고객',
-      carName: '기아 레이',
-      situation: '저신용, 기대출 과다, 주부',
-      process: '기대출 내역 분석 후 예외 승인 가능한 금융사 매칭, 레이 출고',
-      review: '다른 곳에서는 안 된다고만 해서 포기하려 했는데, 친절하게 방법이 있다고 해주셔서 너무 든든했습니다. 아이들 등하원용으로 예쁜 레이 잘 타고 있습니다.',
-      region: '서울 송파',
-      date: '2026.06.22',
-      image: 'https://images.unsplash.com/photo-1629897048514-3dd7414272aa?auto=format&fit=crop&q=80&fm=webp&w=800'
-    },
-    {
-      id: 3,
-      title: '자영업자 고객의 카니발 상담 사례',
-      carName: '기아 카니발',
-      situation: '개인회생 진행 중, 개인사업자',
-      process: '사업자 통장 거래 내역으로 소득 증빙, 업무용 카니발 승인',
-      review: '사업 때문에 짐도 싣고 다녀야 해서 큰 차가 필요했는데, 회생 중이라 걱정이 많았습니다. 다행히 매출 증빙을 도와주셔서 무사히 카니발 뽑았습니다.',
-      region: '부산 해운대',
-      date: '2026.07.01',
-      image: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80&fm=webp&w=800'
-    },
-    {
-      id: 4,
-      title: '월 납입 부담을 줄여 SUV를 선택한 사례',
-      carName: '현대 싼타페',
-      situation: '신용평점 하락, 프리랜서',
-      process: '여유자금 포함하여 예산 설계, 싼타페 출고 및 보험료 해결',
-      review: '프리랜서라 소득이 일정치 않아 할부가 안 될 줄 알았는데, 저에게 딱 맞는 플랜을 짜주셨습니다. 초기비용 없이 여유자금까지 넉넉히 받아 한시름 놓았습니다.',
-      region: '인천 부평',
-      date: '2026.07.05',
-      image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&fm=webp&w=800'
-    }
-  ];
-
-  return (
-    <section className="py-24 bg-slate-50" id="reviews">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy mb-4 tracking-tight">단비카와 함께 다시 시작한 고객 이야기</h2>
-          <p className="text-slate-600 text-lg">단비카를 통해 희망을 찾은 고객님들의 생생한 후기입니다.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {reviews.map((review) => (
-            <Card key={review.id} className="!p-0 overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300">
-              <div className="relative h-64 bg-slate-200">
-                <img loading="lazy" src={review.image} alt={review.carName} className="w-full h-full object-cover" />
-                <div className="absolute top-4 left-4">
-                  <span className="bg-brand-navy/90 backdrop-blur text-white text-sm font-bold px-3 py-1.5 rounded-lg shadow-sm">
-                    {review.carName}
-                  </span>
-                </div>
-              </div>
-              <div className="p-6 sm:p-8 flex-grow flex flex-col">
-                <h3 className="text-xl font-bold text-brand-navy mb-4 leading-snug">{review.title}</h3>
-                
-                <div className="space-y-3 mb-6 flex-grow">
-                  <div className="flex items-start gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-brand-orange mt-2 shrink-0"></div>
-                    <div>
-                      <span className="text-xs font-bold text-brand-orange block mb-0.5">고객 상황</span>
-                      <p className="text-slate-700 text-sm font-medium">{review.situation}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-brand-blue mt-2 shrink-0"></div>
-                    <div>
-                      <span className="text-xs font-bold text-brand-blue block mb-0.5">상담 과정</span>
-                      <p className="text-slate-700 text-sm font-medium">{review.process}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6 relative">
-                  <MessageCircle className="w-5 h-5 text-slate-300 absolute top-4 left-4" />
-                  <p className="text-slate-600 text-sm leading-relaxed pl-8 break-keep">
-                    "{review.review}"
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between text-xs text-slate-500 font-medium pt-4 border-t border-slate-100 mt-auto">
-                  <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4" /> {review.region}</span>
-                  <span className="flex items-center gap-1.5"><CalendarDays className="w-4 h-4" /> {review.date}</span>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-        
-        <div className="text-center">
-          <p className="text-sm font-semibold text-slate-400 bg-white border border-slate-200 py-2.5 px-6 rounded-full inline-block">
-            * 본 후기는 고객의 이해를 돕기 위해 구성된 샘플 사례입니다.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-};
-
 const FAQSection = () => {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
 
@@ -719,10 +570,10 @@ export default function App() {
           <div className="flex items-center gap-6">
             <nav className="hidden md:flex items-center gap-5 text-sm font-semibold text-slate-700">
               <a href="#about" className="hover:text-brand-blue transition-colors">소개</a>
-              <a href="#simulator" className="hover:text-brand-blue transition-colors">월 납입 계산</a>
-              <a href="#cars" className="hover:text-brand-blue transition-colors">차량</a>
-              <a href="#vehicle-check" className="hover:text-brand-blue transition-colors">차량 확인</a>
-              <a href="#documents" className="hover:text-brand-blue transition-colors">준비 서류</a>
+              <a href="#simulator" className="hover:text-brand-blue transition-colors">월 납입</a>
+              <a href="#delivery" className="hover:text-brand-blue transition-colors">탁송</a>
+              <a href="#insights" className="hover:text-brand-blue transition-colors">가이드</a>
+              <a href="#reviews" className="hover:text-brand-blue transition-colors">후기</a>
               <a href="#contact" className="hover:text-brand-blue transition-colors">무료 상담</a>
             </nav>
             
@@ -927,6 +778,8 @@ export default function App() {
         <PaymentSimulator />
         <DocumentChecklist />
         <VehicleCheckGuide />
+        <RegionalDeliverySection />
+        <InsightsSection />
 
         {/* 5. Extra Funds Consultation Section */}
         <section className="py-24 bg-sky-50 relative overflow-hidden" id="funds">

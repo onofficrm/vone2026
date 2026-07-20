@@ -1,0 +1,58 @@
+{
+  "updatedAt": "2026-07-20",
+  "isSample": true,
+  "consultations": [
+    { "name": "김○○님", "type": "개인회생 인가", "car": "카니발", "status": "상담 접수", "tone": "neutral" },
+    { "name": "박○○님", "type": "저신용 직장인", "car": "아반떼", "status": "상담 진행", "tone": "blue" },
+    { "name": "이○○님", "type": "개인회생 진행 중", "car": "SUV", "status": "상담 완료", "tone": "orange" },
+    { "name": "최○○님", "type": "기존 할부 거절", "car": "레이", "status": "상담 접수", "tone": "neutral" },
+    { "name": "정○○님", "type": "사업자", "car": "싼타페", "status": "차량 확인", "tone": "blue" },
+    { "name": "한○○님", "type": "프리랜서", "car": "K5", "status": "상담 진행", "tone": "orange" }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "title": "개인회생 중 출퇴근용 아반떼 상담 사례",
+      "carName": "현대 아반떼",
+      "situation": "개인회생 인가 후 12회차 납부 중, 직장인",
+      "process": "월 납입금 30만원대 예산으로 아반떼 추천 및 전액 할부 승인",
+      "review": "출퇴근 차량이 꼭 필요했는데 여기저기 거절당하다가 단비카를 알게 되었습니다. 제 상황에 맞게 꼼꼼하게 상담해주시고 좋은 차량으로 출고해주셔서 감사합니다.",
+      "region": "경기 수원",
+      "date": "2026.06.15",
+      "image": "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&q=80&fm=webp&w=800"
+    },
+    {
+      "id": 2,
+      "title": "기존 할부 거절 후 경차를 선택한 고객",
+      "carName": "기아 레이",
+      "situation": "저신용, 기대출 과다, 주부",
+      "process": "기대출 내역 분석 후 예외 승인 가능한 금융사 매칭, 레이 출고",
+      "review": "다른 곳에서는 안 된다고만 해서 포기하려 했는데, 친절하게 방법이 있다고 해주셔서 너무 든든했습니다. 아이들 등하원용으로 예쁜 레이 잘 타고 있습니다.",
+      "region": "서울 송파",
+      "date": "2026.06.22",
+      "image": "https://images.unsplash.com/photo-1629897048514-3dd7414272aa?auto=format&fit=crop&q=80&fm=webp&w=800"
+    },
+    {
+      "id": 3,
+      "title": "자영업자 고객의 카니발 상담 사례",
+      "carName": "기아 카니발",
+      "situation": "개인회생 진행 중, 개인사업자",
+      "process": "사업자 통장 거래 내역으로 소득 증빙, 업무용 카니발 승인",
+      "review": "사업 때문에 짐도 싣고 다녀야 해서 큰 차가 필요했는데, 회생 중이라 걱정이 많았습니다. 다행히 매출 증빙을 도와주셔서 무사히 카니발 뽑았습니다.",
+      "region": "부산 해운대",
+      "date": "2026.07.01",
+      "image": "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80&fm=webp&w=800"
+    },
+    {
+      "id": 4,
+      "title": "월 납입 부담을 줄여 SUV를 선택한 사례",
+      "carName": "현대 싼타페",
+      "situation": "신용평점 하락, 프리랜서",
+      "process": "여유자금 포함하여 예산 설계, 싼타페 출고 및 보험료 해결",
+      "review": "프리랜서라 소득이 일정치 않아 할부가 안 될 줄 알았는데, 저에게 딱 맞는 플랜을 짜주셨습니다. 초기비용 없이 여유자금까지 넉넉히 받아 한시름 놓았습니다.",
+      "region": "인천 부평",
+      "date": "2026.07.05",
+      "image": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&fm=webp&w=800"
+    }
+  ]
+}
