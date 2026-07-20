@@ -110,6 +110,10 @@ $site_config = array(
     'icrm_hub_geo_button'       => true,
     /* onoff-builder-bridge — 루트 / 를 빌더 페이지로 (project_id) */
     'home_builder_bridge_id'    => 'danbicar',
+    /* 단비카 피드 게시판 연동 (/api/danbi-feed.php?source=board) — DB 복구 후 테이블명 입력 */
+    'danbi_feed_status_bo_table' => '',
+    'danbi_feed_review_bo_table' => '',
+    'danbi_feed_car_bo_table'    => '',
 );
 
 /**

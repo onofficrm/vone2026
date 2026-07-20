@@ -20,14 +20,30 @@ export type FeedReview = {
   image: string;
 };
 
+export type FeedCar = {
+  id: number;
+  manufacturer: string;
+  name: string;
+  year: string;
+  mileage: string;
+  fuel: string;
+  type: string;
+  image: string;
+  priceLabel?: string;
+  monthlyLabel?: string;
+  stock?: string;
+};
+
 export type HomeFeed = {
   updatedAt?: string;
   isSample?: boolean;
   consultations: FeedConsultation[];
   reviews: FeedReview[];
+  cars?: FeedCar[];
 };
 
 export const FEED_URL = '/plugin/onoff-builder-bridge/imports/danbicar/home-feed.json';
+export const FEED_API_URL = '/api/danbi-feed.php';
 
 const fallbackFeed: HomeFeed = {
   updatedAt: '',
@@ -39,7 +55,18 @@ const fallbackFeed: HomeFeed = {
     { name: '최○○님', type: '기존 할부 거절', car: '레이', status: '상담 접수', tone: 'neutral' },
   ],
   reviews: [],
+  cars: [],
 };
+
+function mergeFeed(data: HomeFeed): HomeFeed {
+  return {
+    ...fallbackFeed,
+    ...data,
+    consultations: data.consultations?.length ? data.consultations : fallbackFeed.consultations,
+    reviews: data.reviews?.length ? data.reviews : fallbackFeed.reviews,
+    cars: data.cars?.length ? data.cars : fallbackFeed.cars,
+  };
+}
 
 export function useHomeFeed() {
   const [feed, setFeed] = useState<HomeFeed>(fallbackFeed);
@@ -47,25 +74,28 @@ export function useHomeFeed() {
 
   useEffect(() => {
     let alive = true;
-    fetch(FEED_URL, { credentials: 'same-origin' })
+    const ctrl = new AbortController();
+    const timer = window.setTimeout(() => ctrl.abort(), 4000);
+
+    // 정적 JSON 우선 (PHP/DB 장애와 무관). API는 보조.
+    fetch(FEED_URL, { credentials: 'same-origin', signal: ctrl.signal })
       .then((res) => (res.ok ? res.json() : Promise.reject()))
       .then((data: HomeFeed) => {
         if (!alive || !data) return;
-        setFeed({
-          ...fallbackFeed,
-          ...data,
-          consultations: data.consultations?.length ? data.consultations : fallbackFeed.consultations,
-          reviews: data.reviews?.length ? data.reviews : fallbackFeed.reviews,
-        });
+        setFeed(mergeFeed(data));
       })
       .catch(() => {
         /* keep fallback */
       })
       .finally(() => {
+        window.clearTimeout(timer);
         if (alive) setLoading(false);
       });
+
     return () => {
       alive = false;
+      ctrl.abort();
+      window.clearTimeout(timer);
     };
   }, []);
 

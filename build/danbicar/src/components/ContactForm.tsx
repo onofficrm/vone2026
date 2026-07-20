@@ -43,6 +43,7 @@ export function ContactForm() {
     name: '',
     phone: '',
     status: '',
+    timeSlot: '',
     message: '',
     agreement: false,
     website_url: '',
@@ -83,6 +84,7 @@ export function ContactForm() {
   const buildMessage = () => {
     const parts = [
       formData.status ? `현재 상태: ${formData.status}` : '',
+      formData.timeSlot ? `희망 상담 시간: ${formData.timeSlot}` : '',
       formData.message.trim(),
     ].filter(Boolean);
     let msg = parts.join('\n');
@@ -98,6 +100,10 @@ export function ContactForm() {
 
     if (!formData.agreement) {
       setError('개인정보 수집 및 이용에 동의해주세요.');
+      return;
+    }
+    if (!formData.timeSlot) {
+      setError('희망 상담 시간을 선택해 주세요.');
       return;
     }
     if (isSubmitting) return;
@@ -163,7 +169,7 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg border border-slate-100 text-left">
       <p className="text-sm text-slate-500 mb-6 break-keep">
-        이름·연락처·현재 상태만 남겨주시면 됩니다. 자세한 내용은 상담 시 함께 확인합니다.
+        이름·연락처·상태·희망 시간만 남겨주시면 됩니다. 자세한 내용은 상담 시 함께 확인합니다.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -199,7 +205,7 @@ export function ContactForm() {
           />
         </div>
 
-        <div className="md:col-span-2">
+        <div>
           <label className="block text-sm font-semibold text-slate-700 mb-2">
             현재 상태 <span className="text-brand-orange">*</span>
           </label>
@@ -220,6 +226,32 @@ export function ContactForm() {
             <option value="기존 할부 거절">기존 할부 거절</option>
             <option value="기타">기타</option>
           </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
+            희망 상담 시간 <span className="text-brand-orange">*</span>
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            {['오전', '오후', '저녁', '시간 상관없음'].map((slot) => (
+              <button
+                key={slot}
+                type="button"
+                onClick={() => setFormData((prev) => ({ ...prev, timeSlot: slot }))}
+                className={`px-3 py-3 rounded-xl text-sm font-bold border transition-colors ${
+                  formData.timeSlot === slot
+                    ? 'bg-brand-navy text-white border-brand-navy'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-brand-blue/40'
+                }`}
+              >
+                {slot}
+              </button>
+            ))}
+          </div>
+          <input type="hidden" name="timeSlot" value={formData.timeSlot} required={false} />
+          {!formData.timeSlot && (
+            <p className="text-xs text-slate-400 mt-2">상담 가능한 시간대를 선택해 주세요.</p>
+          )}
         </div>
 
         <div className="md:col-span-2">

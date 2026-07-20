@@ -54,5 +54,15 @@
       "date": "2026.07.05",
       "image": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&fm=webp&w=800"
     }
+  ],
+  "cars": [
+    { "id": 1, "manufacturer": "현대", "name": "아반떼", "year": "2022", "mileage": "3만 km", "fuel": "가솔린", "type": "준중형", "image": "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&fm=webp&w=800", "priceLabel": "상담 문의", "monthlyLabel": "30만원대 상담", "stock": "상담 가능" },
+    { "id": 2, "manufacturer": "기아", "name": "K5", "year": "2021", "mileage": "5만 km", "fuel": "가솔린", "type": "중형", "image": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&fm=webp&w=800", "priceLabel": "상담 문의", "monthlyLabel": "조건에 따라 확인", "stock": "상담 가능" },
+    { "id": 3, "manufacturer": "현대", "name": "그랜저", "year": "2020", "mileage": "6만 km", "fuel": "가솔린/하이브리드", "type": "대형", "image": "https://images.unsplash.com/photo-1580274455191-1c62238fa333?auto=format&fit=crop&q=80&fm=webp&w=800", "priceLabel": "상담 문의", "monthlyLabel": "조건에 따라 확인", "stock": "상담 후 확인" },
+    { "id": 4, "manufacturer": "기아", "name": "레이", "year": "2023", "mileage": "1만 km", "fuel": "가솔린", "type": "경차", "image": "https://images.unsplash.com/photo-1629897048514-3dd7414272aa?auto=format&fit=crop&q=80&fm=webp&w=800", "priceLabel": "상담 문의", "monthlyLabel": "20만원대 상담", "stock": "상담 가능" },
+    { "id": 5, "manufacturer": "현대", "name": "캐스퍼", "year": "2022", "mileage": "2만 km", "fuel": "가솔린", "type": "경차", "image": "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&q=80&fm=webp&w=800", "priceLabel": "상담 문의", "monthlyLabel": "20만원대 상담", "stock": "상담 가능" },
+    { "id": 6, "manufacturer": "기아", "name": "스포티지", "year": "2021", "mileage": "4만 km", "fuel": "디젤", "type": "SUV", "image": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&q=80&fm=webp&w=800", "priceLabel": "상담 문의", "monthlyLabel": "조건에 따라 확인", "stock": "상담 후 확인" },
+    { "id": 7, "manufacturer": "현대", "name": "싼타페", "year": "2020", "mileage": "7만 km", "fuel": "디젤/가솔린", "type": "SUV", "image": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&fm=webp&w=800", "priceLabel": "상담 문의", "monthlyLabel": "조건에 따라 확인", "stock": "상담 가능" },
+    { "id": 8, "manufacturer": "기아", "name": "카니발", "year": "2022", "mileage": "4만 km", "fuel": "디젤/가솔린", "type": "승합차", "image": "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80&fm=webp&w=800", "priceLabel": "상담 문의", "monthlyLabel": "조건에 따라 확인", "stock": "상담 가능" }
   ]
 }
