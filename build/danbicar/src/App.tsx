@@ -5,6 +5,11 @@ import { StatisticsSection } from './components/StatisticsSection';
 import { PaymentSimulator } from './components/PaymentSimulator';
 import { DocumentChecklist } from './components/DocumentChecklist';
 import { ContactForm } from './components/ContactForm';
+import { ResponseHoursNotice } from './components/ResponseHoursNotice';
+import { VehicleCheckGuide } from './components/VehicleCheckGuide';
+import { SituationAnchors } from './components/SituationAnchors';
+import { ToastHost } from './components/ToastHost';
+import { KAKAO_URL, openKakaoWithPrefill, buildSituationMessage } from './lib/consult';
 
 /**
  * 단비카 공통 버튼 컴포넌트
@@ -45,11 +50,12 @@ interface CardProps {
   children: React.ReactNode;
   className?: string;
   hover?: boolean;
+  id?: string;
 }
 
-const Card: React.FC<CardProps> = ({ children, className = '', hover = false }) => {
+const Card: React.FC<CardProps> = ({ children, className = '', hover = false, id }) => {
   return (
-    <div className={`bg-white rounded-2xl border border-slate-100 p-6 sm:p-8 
+    <div id={id} className={`bg-white rounded-2xl border border-slate-100 p-6 sm:p-8 
       ${hover ? 'transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-brand-light shadow-sm' : 'shadow-sm'} 
       ${className}`}
     >
@@ -57,6 +63,41 @@ const Card: React.FC<CardProps> = ({ children, className = '', hover = false }) 
     </div>
   );
 };
+
+const openKakaoConsult = async (message = '단비카 상담 문의합니다.') => {
+  const copied = await openKakaoWithPrefill(message);
+  if (copied) {
+    window.dispatchEvent(
+      new CustomEvent('danbi-toast', {
+        detail: '상담 문구가 복사되었습니다. 카카오톡에 붙여넣어 주세요.',
+      }),
+    );
+  }
+};
+
+const KakaoCta = ({
+  children,
+  className = '',
+  variant = 'kakao',
+  message,
+  showIcon = true,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  variant?: 'kakao' | 'outline';
+  message?: string;
+  showIcon?: boolean;
+}) => (
+  <Button
+    type="button"
+    variant={variant}
+    className={className}
+    icon={showIcon ? MessageCircle : undefined}
+    onClick={() => openKakaoConsult(message)}
+  >
+    {children}
+  </Button>
+);
 
 const carData = [
   { id: 1, manufacturer: '현대', name: '아반떼', year: '2022', mileage: '3만 km', fuel: '가솔린', type: '준중형', image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&fm=webp&w=800' },
@@ -497,6 +538,19 @@ const InteractivePrompt = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleKakaoClick = async (option: string) => {
+    const copied = await openKakaoWithPrefill(buildSituationMessage(option));
+    setIsClosed(true);
+    setIsVisible(false);
+    if (copied) {
+      window.dispatchEvent(
+        new CustomEvent('danbi-toast', {
+          detail: '상담 내용이 복사되었습니다. 카카오톡에 붙여넣어 주세요.',
+        }),
+      );
+    }
+  };
+
   const options = [
     '개인회생 중이에요',
     '신용점수가 낮아요',
@@ -524,13 +578,22 @@ const InteractivePrompt = () => {
       </div>
       <div className="p-3 bg-slate-50 flex flex-col gap-1.5 max-h-64 overflow-y-auto">
         {options.map((opt, i) => (
-          <button 
-            key={i} 
-            onClick={() => handleOptionClick(opt)}
-            className="text-left w-full px-4 py-2.5 bg-white border border-slate-200 hover:border-brand-blue hover:text-brand-blue hover:bg-sky-50 rounded-xl text-sm font-medium text-slate-700 transition-colors shadow-sm"
-          >
-            {opt}
-          </button>
+          <div key={i} className="flex gap-1.5">
+            <button 
+              onClick={() => handleOptionClick(opt)}
+              className="text-left flex-1 px-3 py-2.5 bg-white border border-slate-200 hover:border-brand-blue hover:text-brand-blue hover:bg-sky-50 rounded-xl text-sm font-medium text-slate-700 transition-colors shadow-sm"
+            >
+              {opt}
+            </button>
+            <button
+              type="button"
+              onClick={() => handleKakaoClick(opt)}
+              className="px-2.5 rounded-xl bg-[#FEE500] text-[#3A2929] text-xs font-bold hover:bg-[#F4DC00]"
+              title="카카오톡으로 상담"
+            >
+              카톡
+            </button>
+          </div>
         ))}
       </div>
     </div>
@@ -539,6 +602,16 @@ const InteractivePrompt = () => {
 
 const FloatingMenuPC = () => {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+  const openKakao = async () => {
+    const copied = await openKakaoWithPrefill('단비카 상담 문의합니다.');
+    if (copied) {
+      window.dispatchEvent(
+        new CustomEvent('danbi-toast', {
+          detail: '상담 문구가 복사되었습니다. 카카오톡에 붙여넣어 주세요.',
+        }),
+      );
+    }
+  };
 
   return (
     <div className="hidden lg:flex fixed right-6 bottom-10 flex-col gap-3 z-50">
@@ -546,10 +619,10 @@ const FloatingMenuPC = () => {
         <Phone className="w-6 h-6" />
         <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-brand-navy text-white px-3 py-1.5 rounded-lg text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md pointer-events-none">전화상담</div>
       </a>
-      <a href="https://open.kakao.com/o/sILPODCi" target="_blank" rel="noreferrer" className="w-14 h-14 bg-[#FEE500] rounded-full shadow-lg flex items-center justify-center text-[#3A2929] hover:bg-[#F4DC00] transition-transform hover:-translate-y-1 group relative">
+      <button type="button" onClick={openKakao} className="w-14 h-14 bg-[#FEE500] rounded-full shadow-lg flex items-center justify-center text-[#3A2929] hover:bg-[#F4DC00] transition-transform hover:-translate-y-1 group relative">
         <MessageCircle className="w-6 h-6" />
         <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-[#FEE500] text-[#3A2929] px-3 py-1.5 rounded-lg text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md pointer-events-none">카카오톡</div>
-      </a>
+      </button>
       <a href="#contact" className="w-14 h-14 bg-brand-blue rounded-full shadow-lg flex items-center justify-center text-white hover:bg-sky-700 transition-transform hover:-translate-y-1 group relative">
         <ClipboardList className="w-6 h-6" />
         <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-brand-blue text-white px-3 py-1.5 rounded-lg text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md pointer-events-none">간편상담</div>
@@ -562,6 +635,17 @@ const FloatingMenuPC = () => {
 };
 
 const FloatingMenuMobile = () => {
+  const openKakao = async () => {
+    const copied = await openKakaoWithPrefill('단비카 상담 문의합니다.');
+    if (copied) {
+      window.dispatchEvent(
+        new CustomEvent('danbi-toast', {
+          detail: '상담 문구가 복사되었습니다. 카카오톡에 붙여넣어 주세요.',
+        }),
+      );
+    }
+  };
+
   return (
     <div className="lg:hidden fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 z-50 flex items-center justify-between pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
       <a href="#" className="flex-1 flex flex-col items-center justify-center py-2.5 text-slate-500 hover:text-brand-navy transition-colors">
@@ -577,10 +661,10 @@ const FloatingMenuMobile = () => {
         <Phone className="w-5 h-5 mb-1" />
         <span className="text-[10px]">전화상담</span>
       </a>
-      <a href="https://open.kakao.com/o/sILPODCi" target="_blank" rel="noreferrer" className="flex-1 flex flex-col items-center justify-center py-2.5 text-[#3A2929] bg-[#FEE500] hover:bg-[#F4DC00] font-bold transition-colors">
+      <button type="button" onClick={openKakao} className="flex-1 flex flex-col items-center justify-center py-2.5 text-[#3A2929] bg-[#FEE500] hover:bg-[#F4DC00] font-bold transition-colors">
         <MessageCircle className="w-5 h-5 mb-1" />
         <span className="text-[10px]">카카오톡</span>
-      </a>
+      </button>
     </div>
   );
 };
@@ -606,9 +690,9 @@ const FinalCTASection = () => {
               <Button as="a" href="tel:15994950" variant="outline" icon={Phone} className="border-white/30 text-white hover:bg-white/10 flex-1">
                 1599-4950 전화상담
               </Button>
-              <Button as="a" href="https://open.kakao.com/o/sILPODCi" target="_blank" rel="noreferrer" variant="kakao" icon={MessageCircle} className="flex-1">
+              <KakaoCta className="flex-1">
                 카카오톡 상담
-              </Button>
+              </KakaoCta>
             </div>
           </div>
         </div>
@@ -620,6 +704,7 @@ const FinalCTASection = () => {
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-brand-gray selection:bg-brand-blue selection:text-white pb-24 lg:pb-0">
+      <ToastHost />
       
       {/* 1. Header (GNB) */}
       <header className="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md border-b border-slate-100 z-50">
@@ -636,9 +721,8 @@ export default function App() {
               <a href="#about" className="hover:text-brand-blue transition-colors">소개</a>
               <a href="#simulator" className="hover:text-brand-blue transition-colors">월 납입 계산</a>
               <a href="#cars" className="hover:text-brand-blue transition-colors">차량</a>
+              <a href="#vehicle-check" className="hover:text-brand-blue transition-colors">차량 확인</a>
               <a href="#documents" className="hover:text-brand-blue transition-colors">준비 서류</a>
-              <a href="#reviews" className="hover:text-brand-blue transition-colors">후기</a>
-              <a href="#faq" className="hover:text-brand-blue transition-colors">FAQ</a>
               <a href="#contact" className="hover:text-brand-blue transition-colors">무료 상담</a>
             </nav>
             
@@ -647,10 +731,10 @@ export default function App() {
                 <Phone className="w-4 h-4" />
                 1599-4950
               </Button>
-              <Button as="a" href="https://open.kakao.com/o/sILPODCi" target="_blank" rel="noreferrer" variant="kakao" className="!py-2 !px-4 !rounded-lg text-sm !gap-1.5">
+              <KakaoCta className="!py-2 !px-4 !rounded-lg text-sm !gap-1.5" showIcon={false}>
                 <MessageCircle className="w-4 h-4" />
                 카카오톡 상담
-              </Button>
+              </KakaoCta>
             </div>
             
             <button className="md:hidden p-2 text-slate-600 hover:text-brand-navy">
@@ -699,9 +783,9 @@ export default function App() {
               <Button as="a" href="tel:15994950" variant="outline" icon={Phone} className="w-full sm:w-auto text-base sm:text-lg py-4 px-8 !bg-white/10 !text-white !border-white/30 hover:!bg-white/20">
                 전화로 바로 상담하기
               </Button>
-              <Button as="a" href="https://open.kakao.com/o/sILPODCi" target="_blank" rel="noreferrer" variant="kakao" icon={MessageCircle} className="w-full sm:w-auto text-base sm:text-lg py-4 px-8">
+              <KakaoCta className="w-full sm:w-auto text-base sm:text-lg py-4 px-8">
                 카카오톡으로 상담하기
-              </Button>
+              </KakaoCta>
             </div>
 
             <p className="text-sm text-slate-400 bg-black/20 px-4 py-2 rounded-lg backdrop-blur-sm inline-block">
@@ -709,6 +793,8 @@ export default function App() {
             </p>
           </div>
         </section>
+
+        <SituationAnchors />
 
         {/* 3. Customer Empathy Section */}
         <section className="py-24 bg-white" id="credit">
@@ -719,21 +805,21 @@ export default function App() {
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              <Card className="flex flex-col items-start text-left bg-slate-50 hover:bg-white">
+              <Card id="rehab" className="flex flex-col items-start text-left bg-slate-50 hover:bg-white scroll-mt-24">
                 <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 text-slate-600 flex items-center justify-center mb-5 shadow-sm">
                   <FileWarning className="w-6 h-6" />
                 </div>
                 <p className="text-lg font-bold text-brand-navy break-keep leading-snug">개인회생 중이라 자동차 할부가 불가능할 것 같다.</p>
               </Card>
 
-              <Card className="flex flex-col items-start text-left bg-slate-50 hover:bg-white">
+              <Card id="lowcredit" className="flex flex-col items-start text-left bg-slate-50 hover:bg-white scroll-mt-24">
                 <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 text-slate-600 flex items-center justify-center mb-5 shadow-sm">
                   <TrendingDown className="w-6 h-6" />
                 </div>
                 <p className="text-lg font-bold text-brand-navy break-keep leading-snug">신용점수가 낮아 금융사에서 거절당했다.</p>
               </Card>
 
-              <Card className="flex flex-col items-start text-left bg-slate-50 hover:bg-white">
+              <Card id="rejected" className="flex flex-col items-start text-left bg-slate-50 hover:bg-white scroll-mt-24">
                 <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 text-slate-600 flex items-center justify-center mb-5 shadow-sm">
                   <CreditCard className="w-6 h-6" />
                 </div>
@@ -824,9 +910,9 @@ export default function App() {
               <Button as="a" href="#contact" variant="accent" className="w-full sm:w-auto text-lg py-4 px-8">
                 내 조건 상담받기
               </Button>
-              <Button as="a" href="https://open.kakao.com/o/sILPODCi" target="_blank" rel="noreferrer" variant="kakao" icon={MessageCircle} className="w-full sm:w-auto text-lg py-4 px-8">
+              <KakaoCta className="w-full sm:w-auto text-lg py-4 px-8">
                 카카오톡 문의하기
-              </Button>
+              </KakaoCta>
             </div>
           </div>
         </section>
@@ -840,6 +926,7 @@ export default function App() {
         <CarListSection />
         <PaymentSimulator />
         <DocumentChecklist />
+        <VehicleCheckGuide />
 
         {/* 5. Extra Funds Consultation Section */}
         <section className="py-24 bg-sky-50 relative overflow-hidden" id="funds">
@@ -904,9 +991,9 @@ export default function App() {
                   <Button as="a" href="#contact" variant="primary" className="w-full sm:flex-1 py-4 text-lg">
                     차량＋자금 조건 확인하기
                   </Button>
-                  <Button as="a" href="https://open.kakao.com/o/sILPODCi" target="_blank" rel="noreferrer" variant="outline" className="w-full sm:flex-1 py-4 text-lg bg-white">
+                  <KakaoCta variant="outline" className="w-full sm:flex-1 py-4 text-lg bg-white" showIcon={false}>
                     상담사에게 문의하기
-                  </Button>
+                  </KakaoCta>
                 </div>
                 
                 <div className="bg-black/5 rounded-xl p-4 sm:p-5 space-y-2">
@@ -942,12 +1029,18 @@ export default function App() {
         {/* 6. Quick Consultation Form Section */}
         <section className="py-24 bg-brand-light/30 relative" id="contact">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
-            <div className="text-center mb-12">
+            <div className="text-center mb-8">
               <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy mb-4 tracking-tight">30초 간편 상담 신청</h2>
               <p className="text-slate-600 text-lg">복잡한 서류 없이 기본정보를 남겨주시면 상담사가 고객의 상황을 확인한 후 연락드립니다.</p>
             </div>
 
+            <ResponseHoursNotice className="mb-8" />
+
             <ContactForm />
+
+            <p className="mt-4 text-center text-sm text-slate-500 break-keep">
+              * 상담 신청만으로 차량 계약이나 금융상품 가입이 진행되지 않습니다.
+            </p>
 
             <div className="mt-8 bg-brand-navy/5 rounded-xl p-5 border border-brand-navy/10 text-xs text-slate-500 space-y-1.5 leading-relaxed text-left">
               <p className="font-semibold text-slate-600 mb-2 text-sm">※ 유의사항</p>
@@ -963,9 +1056,9 @@ export default function App() {
                 <Button as="a" href="tel:15994950" variant="outline" icon={Phone} className="w-full sm:w-auto py-4 px-8 text-brand-navy border-slate-300 bg-white hover:bg-slate-50">
                   전화상담 1599-4950
                 </Button>
-                <Button as="a" href="https://open.kakao.com/o/sILPODCi" target="_blank" rel="noreferrer" variant="kakao" icon={MessageCircle} className="w-full sm:w-auto py-4 px-8">
+                <KakaoCta className="w-full sm:w-auto py-4 px-8">
                   카카오톡 빠른 상담
-                </Button>
+                </KakaoCta>
               </div>
             </div>
           </div>
@@ -984,9 +1077,9 @@ export default function App() {
               </div>
               <p className="text-sm leading-relaxed mb-6">개인회생, 저신용 전문 중고차 할부 상담.<br />어려운 상황에서도 최선의 방법을 찾습니다.</p>
               <div className="text-2xl font-bold text-white mb-2">1599-4950</div>
-              <a href="https://open.kakao.com/o/sILPODCi" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm text-[#FEE500] hover:text-[#F4DC00] font-semibold transition-colors">
+              <button type="button" onClick={() => openKakaoConsult()} className="inline-flex items-center gap-2 text-sm text-[#FEE500] hover:text-[#F4DC00] font-semibold transition-colors">
                 <MessageCircle className="w-4 h-4" /> 카카오톡 상담
-              </a>
+              </button>
             </div>
 
             <div>
