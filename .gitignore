@@ -27,3 +27,7 @@ node_modules/
 .vscode/
 *.swp
 *.swo
+
+# 단비카 문의 메일함 런타임 (개인정보)
+plugin/onoff-builder-bridge/imports/danbicar/inquiry-inbox.json
+plugin/onoff-builder-bridge/imports/danbicar/inquiry-rate-*.txt

@@ -32,9 +32,10 @@ $site_config = array(
     /* 문의 폼 → inquiry 게시판 (proc/inquiry-submit.php) */
     'inquiry_bo_table'        => 'inquiry',
     'inquiry_notify_enabled'  => true,
-    'inquiry_notify_email'    => 'admin@example.com',  /* 운영 시 실제 수신 주소로 변경 */
+    /* 운영 시 실제 수신 주소로 변경 — mailbox(/api/danbi-inquiry-mailbox.php)와 board 알림 공통 */
+    'inquiry_notify_email'    => 'admin@example.com',
     'inquiry_notify_name'     => '관리자',
-    /* 텔레그램 알림 — 운영 시 토큰·채팅 ID 입력 후 enabled true */
+    /* 텔레그램 알림 — 운영 시 토큰·채팅 ID 입력 후 enabled true (mailbox·board 공통 설정) */
     'inquiry_notify_telegram_enabled'  => false,
     'inquiry_notify_telegram_bot_token' => '',
     'inquiry_notify_telegram_chat_id'   => '',

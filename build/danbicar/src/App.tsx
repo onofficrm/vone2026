@@ -16,6 +16,8 @@ import { ReviewSection } from './components/ReviewSection';
 import { CarListSection } from './components/CarListSection';
 import { CompareSection } from './components/CompareSection';
 import { SoftCtaBanner } from './components/SoftCtaBanner';
+import { StatusLookupSection } from './components/StatusLookupSection';
+import { ProcessVideoSection } from './components/ProcessVideoSection';
 import { openKakaoWithPrefill, buildSituationMessage } from './lib/consult';
 
 /**
@@ -478,6 +480,7 @@ export default function App() {
               <a href="#delivery" className="hover:text-brand-blue transition-colors">탁송</a>
               <a href="#insights" className="hover:text-brand-blue transition-colors">가이드</a>
               <a href="#reviews" className="hover:text-brand-blue transition-colors">후기</a>
+              <a href="#status-lookup" className="hover:text-brand-blue transition-colors">진행조회</a>
               <a href="#contact" className="hover:text-brand-blue transition-colors">무료 상담</a>
             </nav>
             
@@ -673,8 +676,10 @@ export default function App() {
         </section>
 
         <ProcessSection />
+        <ProcessVideoSection />
         <CustomerTypeSection />
         <ConsultationStatusSection />
+        <StatusLookupSection />
         <LiveRollingSection />
         <StatisticsSection />
 

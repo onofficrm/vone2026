@@ -111,23 +111,41 @@ export function ContactForm() {
 
     setIsSubmitting(true);
 
-    try {
-      const token = await fetchInquiryToken();
-      const body = new FormData();
-      body.append('name', formData.name.trim());
-      body.append('phone', formData.phone.trim());
-      body.append('message', buildMessage());
-      body.append('privacy_agree', '1');
-      body.append('onoff_inquiry_token', token);
-      body.append('referer_page', window.location.href);
-      body.append('website_url', formData.website_url);
+    const body = new FormData();
+    body.append('name', formData.name.trim());
+    body.append('phone', formData.phone.trim());
+    body.append('message', buildMessage());
+    body.append('privacy_agree', '1');
+    body.append('referer_page', window.location.href);
+    body.append('website_url', formData.website_url);
 
+    try {
+      /* 1) DB 없이 동작하는 메일함 API 우선 (FPM/MySQL 장애 대비) */
+      let data: { success?: boolean; message?: string; redirect_url?: string } | null = null;
+      try {
+        const mailboxRes = await fetch('/api/danbi-inquiry-mailbox.php', {
+          method: 'POST',
+          credentials: 'same-origin',
+          body,
+        });
+        data = await mailboxRes.json().catch(() => null);
+        if (mailboxRes.ok && data?.success) {
+          setIsSubmitted(true);
+          return;
+        }
+      } catch {
+        /* fall through to board path */
+      }
+
+      /* 2) 그누보드 inquiry 게시판 (DB 정상일 때) */
+      const token = await fetchInquiryToken();
+      body.append('onoff_inquiry_token', token);
       const res = await fetch('/proc/inquiry-submit.php', {
         method: 'POST',
         credentials: 'same-origin',
         body,
       });
-      const data = await res.json().catch(() => null);
+      data = await res.json().catch(() => null);
 
       if (!res.ok || !data?.success) {
         throw new Error(data?.message || '접수에 실패했습니다.');
@@ -158,7 +176,14 @@ export function ContactForm() {
         <h3 className="text-2xl sm:text-3xl font-bold text-brand-navy mb-4 break-keep">
           상담 신청이 정상적으로 접수되었습니다.
         </h3>
-        <p className="text-slate-600 text-lg mb-8 break-keep">담당자가 확인 후 순차적으로 연락드리겠습니다.</p>
+        <p className="text-slate-600 text-lg mb-6 break-keep">담당자가 확인 후 순차적으로 연락드리겠습니다.</p>
+        <p className="text-sm text-slate-500 mb-8 break-keep">
+          접수 상태는{' '}
+          <a href="#status-lookup" className="text-brand-blue font-semibold underline-offset-2 hover:underline">
+            연락처 끝자리 조회
+          </a>
+          에서 확인할 수 있습니다.
+        </p>
         <Button type="button" onClick={() => setIsSubmitted(false)} variant="outline">
           새로운 상담 신청하기
         </Button>
